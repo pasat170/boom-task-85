@@ -3,36 +3,36 @@ import "../scss/app.scss";
 window.addEventListener("DOMContentLoaded", () => {
     // This block will be executed once the page is loaded and ready
 
-    const pokenames = document.getElementById('pokenames');
+    const pokedex = document.getElementById('pokedex');
+    let results = [];
+    function displayPokemons() {
+        results.forEach((pokemon) => {
+            const container = document.createElement("div");
+            container.classList.add("row");
 
-    const fetchPokemon = () => {
-        const promises = [];
-        for (let i = 1; i <= 10; i++) {
-            const url = `https://pokeapi.co/api/v2/pokemon/${i}/?limit=10`;
-            promises.push(fetch(url).then((res) => res.json()));
-        }
-        Promise.all(promises).then((results) => {
-            const pokemon = results.map((result) => ({
-                name: result.name,
-                id: result.id
-            }));
-            displayPokemon(pokemon);
-        });
-    };
+            const nameCol = document.createElement("div");
+            nameCol.classList.add("col");
 
-    const displayPokemon = (pokemon) => {
-        console.log(pokemon);
-        const pokemonHTMLString = pokemon
-            .map(
-                (pokeman) => `
-        <li>   
-            <h1>${pokeman.name}</h1> 
-        </li>
-    `
-            )
-            .join('');
-        pokenames.innerHTML = pokemonHTMLString;
-    };
+            const name = document.createElement("li");
+            name.innerText = pokemon["name"];
 
-    fetchPokemon();
+            nameCol.appendChild(name);
+            container.appendChild(nameCol);
+            pokedex.appendChild(container);
+        })
+    }
+
+    fetch("https://pokeapi.co/api/v2/pokemon/?limit=10")
+        .then((response) => {
+            return response.json();
+        })
+        .then((json) => {
+            console.log(json);
+            results = json["results"];
+            displayPokemons();
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+    
 });
