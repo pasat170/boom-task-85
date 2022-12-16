@@ -8,7 +8,7 @@ window.addEventListener("DOMContentLoaded", () => {
     const fetchPokemon = () => {
         const promises = [];
         for (let i = 1; i <= 10; i++) {
-            const url = `https://pokeapi.co/api/v2/pokemon/${i}`;
+            const url = `https://pokeapi.co/api/v2/pokemon/${i}/?limit=10`;
             promises.push(fetch(url).then((res) => res.json()));
         }
         Promise.all(promises).then((results) => {
